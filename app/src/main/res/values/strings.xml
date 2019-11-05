@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">UrbanDictionaryChallenge</string>
+    <string name="ud_key">3528bc4e7emsha0c76cdf3541cc6p1edfe6jsna6a4a1d8d0c4</string>
+    <string name="toolbar_title">Urban Dictionary Definitions</string>
+    <string name="search_text">Search Urban Dictionary </string>
+    <string name="search_hint">Enter term to search for here.</string>
+    <string name="thumbs_up">Thumbs Up: </string>
+    <string name="thumbs_down">Thumbs Down: </string>
+    <string name="sort_by_up">Sort By Thumbs Up </string>
+    <string name="sort_by_down">Sort By Thumbs Down </string>
+</resources>

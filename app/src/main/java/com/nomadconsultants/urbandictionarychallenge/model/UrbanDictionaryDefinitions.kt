@@ -2,9 +2,9 @@ package com.nomadconsultants.urbandictionarychallenge.model
 
 import com.squareup.moshi.Json
 
-data class Definitions(
+data class UrbanDictionaryDefinitions(
     @Json(name = "list")
-    val definitions: List<Definition>
+    val definitions: List<UrbanDictionaryDefinition>
 )
 
 

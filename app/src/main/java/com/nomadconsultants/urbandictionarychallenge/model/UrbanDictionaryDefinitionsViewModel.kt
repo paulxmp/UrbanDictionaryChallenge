@@ -1,25 +1,23 @@
 package com.nomadconsultants.urbandictionarychallenge.model
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.nomadconsultants.urbandictionarychallenge.service.DefinitionsService
+import com.nomadconsultants.urbandictionarychallenge.service.UrbanDictionaryDefinitionsService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DefinitionsViewModel(val definitionsService: DefinitionsService) : ViewModel() {
-    val TAG = DefinitionsViewModel::class.java.simpleName
-    var definitionsList: MutableLiveData<Definitions> = MutableLiveData<Definitions>()
+class UrbanDictionaryDefinitionsViewModel(val definitionsService: UrbanDictionaryDefinitionsService) : ViewModel() {
+
+    var definitionsList: MutableLiveData<UrbanDictionaryDefinitions> = MutableLiveData<UrbanDictionaryDefinitions>()
 
     fun getDefinitions(term: String) {
-        definitionsService.getDefinitions(term).enqueue(object : Callback<Definitions> {
-            override fun onFailure(call: Call<Definitions>, t: Throwable) {
-                Log.d(TAG, "onFailure")
+        definitionsService.getDefinitions(term).let {  }
+        definitionsService.getDefinitions(term).enqueue(object : Callback<UrbanDictionaryDefinitions> {
+            override fun onFailure(call: Call<UrbanDictionaryDefinitions>, t: Throwable) {
             }
 
-            override fun onResponse(call: Call<Definitions>, response: Response<Definitions>) {
-                Log.d(TAG, "onResponse")
+            override fun onResponse(call: Call<UrbanDictionaryDefinitions>, response: Response<UrbanDictionaryDefinitions>) {
                 if (response.isSuccessful) {
                     val responseDefinitions = response.body()
                     if (responseDefinitions != null) {
@@ -36,8 +34,8 @@ class DefinitionsViewModel(val definitionsService: DefinitionsService) : ViewMod
         })
     }
 
-    fun createDummyDefinitions(): Definitions {
-        val dummyDefinitionList = listOf(Definition(
+    fun createDummyDefinitions(): UrbanDictionaryDefinitions {
+        val dummyDefinitionList = listOf(UrbanDictionaryDefinition(
             definition = "No definition found.",
             permalink = "No author found.",
             thumbsUp = 0,
@@ -50,6 +48,6 @@ class DefinitionsViewModel(val definitionsService: DefinitionsService) : ViewMod
             example = "No example found.",
             thumbsDown = 0
         ))
-        return Definitions(definitions = dummyDefinitionList)
+        return UrbanDictionaryDefinitions(definitions = dummyDefinitionList)
     }
 }

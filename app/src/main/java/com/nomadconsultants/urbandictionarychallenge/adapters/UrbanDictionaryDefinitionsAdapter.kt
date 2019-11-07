@@ -5,12 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.nomadconsultants.urbandictionarychallenge.R
-import com.nomadconsultants.urbandictionarychallenge.model.Definition
+import com.nomadconsultants.urbandictionarychallenge.model.UrbanDictionaryDefinition
 import kotlinx.android.synthetic.main.definitions_cardview_item.view.*
 
-class DefinitionsAdapter() :  RecyclerView.Adapter<DefinitionsAdapter.DefinitionsViewHolder>() {
-    var items: MutableList<Definition> = mutableListOf()
-    val itemsHashMap = mutableMapOf<Int, Definition>()
+class UrbanDictionaryDefinitionsAdapter() :  RecyclerView.Adapter<UrbanDictionaryDefinitionsAdapter.DefinitionsViewHolder>() {
+    var items: MutableList<UrbanDictionaryDefinition> = mutableListOf()
 
     class DefinitionsViewHolder(val card: View) : RecyclerView.ViewHolder(card)
 
@@ -21,28 +20,23 @@ class DefinitionsAdapter() :  RecyclerView.Adapter<DefinitionsAdapter.Definition
         holder.card.thumbsDownValueTextView.text = definition.thumbsDown.toString()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DefinitionsViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.definitions_cardview_item, parent, false)
-        return DefinitionsViewHolder(view)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        DefinitionsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.definitions_cardview_item, parent, false))
+
 
     override fun getItemCount() = items.size
 
-    fun addData(definitionList: List<Definition>) {
+    fun addData(definitionList: List<UrbanDictionaryDefinition>) {
         for (definition in definitionList) {
             items.add(definition)
-            itemsHashMap.put(itemsHashMap.size + 1, definition)
         }
         notifyDataSetChanged()
     }
 
-    fun clearData() {
-        items.clear()
-        itemsHashMap.clear()
-    }
+    fun clearData() = items.clear()
 
     fun sortData(byVoteType: String) {
-        var sortedItems: List<Definition> = listOf()
+        var sortedItems: List<UrbanDictionaryDefinition> = listOf()
         sortedItems =  if (byVoteType.equals("thumbsUp")) {
             items.sortedBy { value -> value.thumbsUp }.reversed()
         } else {

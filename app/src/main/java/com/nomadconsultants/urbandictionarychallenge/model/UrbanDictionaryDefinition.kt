@@ -1,9 +1,8 @@
 package com.nomadconsultants.urbandictionarychallenge.model
 
 import com.squareup.moshi.Json
-import kotlin.collections.List
 
-data class Definition(
+data class UrbanDictionaryDefinition(
     @Json(name = "definition")
     val definition: String,
     @Json(name = "permalink")

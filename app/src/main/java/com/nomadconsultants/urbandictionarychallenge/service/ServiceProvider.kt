@@ -37,7 +37,7 @@ fun getOkHttpClient(vararg interceptors: Interceptor): OkHttpClient {
     return client.build()
 }
 
-fun getDefinitionsService(): DefinitionsService {
+fun getDefinitionsService(): UrbanDictionaryDefinitionsService {
     val headerInterceptor = Interceptor { chain ->
         chain.proceed(chain
             .request()
@@ -55,5 +55,5 @@ fun getDefinitionsService(): DefinitionsService {
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .client(getOkHttpClient(getLoggingInterceptor(), headerInterceptor))
         .build()
-        .create(DefinitionsService::class.java)
+        .create(UrbanDictionaryDefinitionsService::class.java)
 }

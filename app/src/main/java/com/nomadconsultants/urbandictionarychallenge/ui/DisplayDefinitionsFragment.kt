@@ -1,7 +1,6 @@
 package com.nomadconsultants.urbandictionarychallenge.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +8,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nomadconsultants.urbandictionarychallenge.R
-import com.nomadconsultants.urbandictionarychallenge.adapters.DefinitionsAdapter
-import com.nomadconsultants.urbandictionarychallenge.model.DefinitionsViewModel
+import com.nomadconsultants.urbandictionarychallenge.adapters.UrbanDictionaryDefinitionsAdapter
+import com.nomadconsultants.urbandictionarychallenge.model.UrbanDictionaryDefinitionsViewModel
 import kotlinx.android.synthetic.main.fragment_display_definitions.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,14 +18,13 @@ import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class DisplayDefinitionsFragment : Fragment() {
-    val TAG = DisplayDefinitionsFragment::class.java.simpleName
-    val definitionsViewModel: DefinitionsViewModel by viewModel()
-    val ioScope = CoroutineScope(Dispatchers.IO)
-    val definitionsAdapter = DefinitionsAdapter()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_display_definitions, container, false)
-    }
+    val definitionsViewModel: UrbanDictionaryDefinitionsViewModel by viewModel()
+    val ioScope = CoroutineScope(Dispatchers.IO)
+    val definitionsAdapter = UrbanDictionaryDefinitionsAdapter()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+        inflater.inflate(R.layout.fragment_display_definitions, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -78,7 +76,6 @@ class DisplayDefinitionsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "onResume")
         mainDefinitionsRecyclerView.scrollToPosition(0)
     }
 

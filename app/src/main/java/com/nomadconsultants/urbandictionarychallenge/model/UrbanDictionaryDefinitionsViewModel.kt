@@ -10,28 +10,34 @@ import retrofit2.Response
 class UrbanDictionaryDefinitionsViewModel(val definitionsService: UrbanDictionaryDefinitionsService) : ViewModel() {
 
     var definitionsList: MutableLiveData<UrbanDictionaryDefinitions> = MutableLiveData<UrbanDictionaryDefinitions>()
+    val definitionsHashMap = mutableMapOf<String, UrbanDictionaryDefinitions>()
 
     fun getDefinitions(term: String) {
-        definitionsService.getDefinitions(term).let {  }
-        definitionsService.getDefinitions(term).enqueue(object : Callback<UrbanDictionaryDefinitions> {
-            override fun onFailure(call: Call<UrbanDictionaryDefinitions>, t: Throwable) {
-            }
-
-            override fun onResponse(call: Call<UrbanDictionaryDefinitions>, response: Response<UrbanDictionaryDefinitions>) {
-                if (response.isSuccessful) {
-                    val responseDefinitions = response.body()
-                    if (responseDefinitions != null) {
-                        if (responseDefinitions.definitions.isNotEmpty()) {
-                            definitionsList.postValue(response.body())
-                        } else {
-                            definitionsList.postValue(createDummyDefinitions())
-                        }
-                    }
-                } else {
-                    definitionsList.postValue(createDummyDefinitions())
+        // did we get it already?
+        if (definitionsHashMap.contains(term)) {
+            definitionsList.postValue(definitionsHashMap.get(term))
+        } else {
+            definitionsService.getDefinitions(term).enqueue(object : Callback<UrbanDictionaryDefinitions> {
+                override fun onFailure(call: Call<UrbanDictionaryDefinitions>, t: Throwable) {
                 }
-            }
-        })
+
+                override fun onResponse(call: Call<UrbanDictionaryDefinitions>, response: Response<UrbanDictionaryDefinitions>) {
+                    if (response.isSuccessful) {
+                        val responseDefinitions = response.body()
+                        if (responseDefinitions != null) {
+                            if (responseDefinitions.definitions.isNotEmpty()) {
+                                definitionsList.postValue(response.body())
+                                definitionsHashMap.put(term, responseDefinitions)
+                            } else {
+                                definitionsList.postValue(createDummyDefinitions())
+                            }
+                        }
+                    } else {
+                        definitionsList.postValue(createDummyDefinitions())
+                    }
+                }
+            })
+        }
     }
 
     fun createDummyDefinitions(): UrbanDictionaryDefinitions {
@@ -50,4 +56,5 @@ class UrbanDictionaryDefinitionsViewModel(val definitionsService: UrbanDictionar
         ))
         return UrbanDictionaryDefinitions(definitions = dummyDefinitionList)
     }
+
 }

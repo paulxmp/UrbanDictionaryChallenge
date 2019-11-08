@@ -33,7 +33,7 @@ android {
 
 dependencies {
 
-    def lifecycle_version = "2.0.0"
+    def lifecycle_version = "2.1.0"
     def room_version = "2.1.0-alpha06"
     def nav_version = "2.2.0-rc01"
     def constraintlayout_version = "2.0.0-beta3"
@@ -71,8 +71,6 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
 
     // Room Persistence Library
-    // ViewModel and LiveData
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation 'androidx.room:room-runtime:2.2.1'
     annotationProcessor 'androidx.room:room-compiler:2.2.1'
 
@@ -108,6 +106,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.2.1'
     testImplementation 'androidx.test:core:1.2.0'
+    testImplementation 'org.mockito:mockito-inline:2.21.0'
     androidTestImplementation 'androidx.fragment:fragment-testing:1.1.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

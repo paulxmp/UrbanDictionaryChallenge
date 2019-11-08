@@ -7,4 +7,6 @@
     <string name="thumbs_down">Thumbs Down: </string>
     <string name="sort_by_up">Sort By Thumbs Up </string>
     <string name="sort_by_down">Sort By Thumbs Down </string>
+    <string name="show_previous_terms">Show Previous Terms</string>
+    <string name="hide_previous_terms">Hide Previous Terms</string>
 </resources>

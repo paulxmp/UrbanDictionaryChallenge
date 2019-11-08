@@ -15,7 +15,7 @@ class UrbanDictionaryDefinitionsViewModel(val definitionsService: UrbanDictionar
     fun getDefinitions(term: String) {
         // did we get it already?
         if (definitionsHashMap.contains(term)) {
-            definitionsList.postValue(definitionsHashMap.get(term))
+            definitionsList.postValue(definitionsHashMap[term])
         } else {
             definitionsService.getDefinitions(term).enqueue(object : Callback<UrbanDictionaryDefinitions> {
                 override fun onFailure(call: Call<UrbanDictionaryDefinitions>, t: Throwable) {
@@ -57,4 +57,5 @@ class UrbanDictionaryDefinitionsViewModel(val definitionsService: UrbanDictionar
         return UrbanDictionaryDefinitions(definitions = dummyDefinitionList)
     }
 
+    fun getPreviousTerms() = definitionsHashMap.keys
 }

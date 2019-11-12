@@ -44,7 +44,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
 
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -106,6 +105,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.2.1'
     testImplementation 'androidx.test:core:1.2.0'
+    testImplementation 'androidx.test:core-ktx:1.2.0'
+    testImplementation "android.arch.core:core-testing:1.1.0"
     testImplementation 'org.mockito:mockito-inline:2.21.0'
     androidTestImplementation 'androidx.fragment:fragment-testing:1.1.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

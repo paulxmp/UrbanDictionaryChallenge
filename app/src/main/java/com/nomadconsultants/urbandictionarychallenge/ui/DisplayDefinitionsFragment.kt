@@ -41,11 +41,11 @@ class DisplayDefinitionsFragment : Fragment() {
             }
 
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query != null) {
+                query?.let {
                     searchSearchView.clearFocus()
                     searchProgressBar.visibility = View.VISIBLE
                     ioScope.launch {
-                        definitionsViewModel.getDefinitions(query)
+                        definitionsViewModel.getDefinitions(it)
                     }
                 }
                 return true
@@ -80,7 +80,7 @@ class DisplayDefinitionsFragment : Fragment() {
         mainDefinitionsRecyclerView.layoutManager = LinearLayoutManager(context)
 
         definitionsViewModel.definitionsList.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            if (it != null) {
+            it.let {
                 definitionsAdapter.clearData()
                 definitionsAdapter.addData(it.definitions)
                 definitionsAdapter.sortData("thumbsUp")

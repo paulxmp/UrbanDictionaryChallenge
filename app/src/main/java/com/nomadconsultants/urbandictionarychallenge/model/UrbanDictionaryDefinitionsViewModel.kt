@@ -24,10 +24,10 @@ class UrbanDictionaryDefinitionsViewModel(val definitionsService: UrbanDictionar
                 override fun onResponse(call: Call<UrbanDictionaryDefinitions>, response: Response<UrbanDictionaryDefinitions>) {
                     if (response.isSuccessful) {
                         val responseDefinitions = response.body()
-                        if (responseDefinitions != null) {
-                            if (responseDefinitions.definitions.isNotEmpty()) {
+                        responseDefinitions?.let {
+                            if (it.definitions.isNotEmpty()) {
                                 definitionsList.postValue(response.body())
-                                definitionsHashMap.put(term, responseDefinitions)
+                                definitionsHashMap.put(term, it)
                             } else {
                                 definitionsList.postValue(createDummyDefinitions())
                             }

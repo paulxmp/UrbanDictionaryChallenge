@@ -1,6 +1,7 @@
 package com.nomadconsultants.urbandictionarychallenge.service
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.nomadconsultants.urbandictionarychallenge.BuildConfig
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -53,6 +54,7 @@ fun getDefinitionsService(): UrbanDictionaryDefinitionsService {
         .baseUrl(BuildConfig.URBAN_DICTIONATRY_API_URL)
         .addConverterFactory(getMoshiConverterFactory())
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .client(getOkHttpClient(getLoggingInterceptor(), headerInterceptor))
         .build()
         .create(UrbanDictionaryDefinitionsService::class.java)

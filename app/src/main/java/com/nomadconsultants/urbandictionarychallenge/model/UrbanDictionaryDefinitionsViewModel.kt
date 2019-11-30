@@ -1,61 +1,74 @@
 package com.nomadconsultants.urbandictionarychallenge.model
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.nomadconsultants.urbandictionarychallenge.service.UrbanDictionaryDefinitionsService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.nomadconsultants.urbandictionarychallenge.repository.UrbanDictionaryDefinitionsRepository
+import io.reactivex.disposables.Disposable
+import io.reactivex.observers.DisposableObserver
 
-class UrbanDictionaryDefinitionsViewModel(val definitionsService: UrbanDictionaryDefinitionsService) : ViewModel() {
+class UrbanDictionaryDefinitionsViewModel(val definitionsRepository: UrbanDictionaryDefinitionsRepository) : ViewModel() {
 
     var definitionsList: MutableLiveData<UrbanDictionaryDefinitions> = MutableLiveData<UrbanDictionaryDefinitions>()
     val definitionsHashMap = mutableMapOf<String, UrbanDictionaryDefinitions>()
+    lateinit var disposable: Disposable
 
     fun getDefinitions(term: String) {
         // did we get it already?
         if (definitionsHashMap.contains(term)) {
             definitionsList.postValue(definitionsHashMap[term])
         } else {
-            definitionsService.getDefinitions(term).enqueue(object : Callback<UrbanDictionaryDefinitions> {
-                override fun onFailure(call: Call<UrbanDictionaryDefinitions>, t: Throwable) {
+            disposable = definitionsRepository.getDefinitions(term)
+                .subscribeWith(object: DisposableObserver<UrbanDictionaryDefinitions>() {
+
+                override fun onError(e: Throwable) {
+                    Log.d("UrbanDictionaryDefinitionsViewModel", "onError");
+                    definitionsList.postValue(createDummyDefinitions())
                 }
 
-                override fun onResponse(call: Call<UrbanDictionaryDefinitions>, response: Response<UrbanDictionaryDefinitions>) {
-                    if (response.isSuccessful) {
-                        val responseDefinitions = response.body()
-                        responseDefinitions?.let {
-                            if (it.definitions.isNotEmpty()) {
-                                definitionsList.postValue(response.body())
-                                definitionsHashMap.put(term, it)
-                            } else {
-                                definitionsList.postValue(createDummyDefinitions())
-                            }
-                        }
+                override fun onNext(data: UrbanDictionaryDefinitions) {
+                    Log.d("UrbanDictionaryDefinitionsViewModel", "onNext");
+                    if (data.definitions.isNotEmpty()) {
+                        definitionsList.postValue(data)
+                        definitionsHashMap.put(term, data)
                     } else {
                         definitionsList.postValue(createDummyDefinitions())
                     }
                 }
+
+                override fun onComplete() {
+                    Log.d("UrbanDictionaryDefinitionsViewModel", "onComplete");
+                }
             })
+
         }
     }
 
+    fun getPreviousTerms() = definitionsHashMap.keys
+
     fun createDummyDefinitions(): UrbanDictionaryDefinitions {
-        val dummyDefinitionList = listOf(UrbanDictionaryDefinition(
-            definition = "No definition found.",
-            permalink = "No author found.",
-            thumbsUp = 0,
-            soundUrls = listOf(""),
-            author = "No author found.",
-            word = "No word found.",
-            defid = 0,
-            currentVote = "No current vote found.",
-            writtenOn = "No written on found.",
-            example = "No example found.",
-            thumbsDown = 0
-        ))
+        val dummyDefinitionList = listOf(
+            UrbanDictionaryDefinition(
+                definition = "No definition found.",
+                permalink = "No author found.",
+                thumbsUp = 0,
+                soundUrls = listOf(""),
+                author = "No author found.",
+                word = "No word found.",
+                defid = 0,
+                currentVote = "No current vote found.",
+                writtenOn = "No written on found.",
+                example = "No example found.",
+                thumbsDown = 0
+            )
+        )
         return UrbanDictionaryDefinitions(definitions = dummyDefinitionList)
     }
 
-    fun getPreviousTerms() = definitionsHashMap.keys
+    override fun onCleared() {
+        super.onCleared()
+        if(!disposable.isDisposed){
+            disposable.dispose()
+        }
+    }
 }

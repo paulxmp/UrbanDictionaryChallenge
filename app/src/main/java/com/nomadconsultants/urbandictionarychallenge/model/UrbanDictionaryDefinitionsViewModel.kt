@@ -4,29 +4,27 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.nomadconsultants.urbandictionarychallenge.repository.UrbanDictionaryDefinitionsRepository
-import io.reactivex.disposables.Disposable
-import io.reactivex.observers.DisposableObserver
+import io.reactivex.observers.DisposableSingleObserver
 
 class UrbanDictionaryDefinitionsViewModel(val definitionsRepository: UrbanDictionaryDefinitionsRepository) : ViewModel() {
 
     var definitionsList: MutableLiveData<UrbanDictionaryDefinitions> = MutableLiveData<UrbanDictionaryDefinitions>()
     val definitionsHashMap = mutableMapOf<String, UrbanDictionaryDefinitions>()
-    lateinit var disposable: Disposable
 
     fun getDefinitions(term: String) {
         // did we get it already?
         if (definitionsHashMap.contains(term)) {
             definitionsList.postValue(definitionsHashMap[term])
         } else {
-            disposable = definitionsRepository.getDefinitions(term)
-                .subscribeWith(object: DisposableObserver<UrbanDictionaryDefinitions>() {
+            definitionsRepository.getDefinitions(term)
+                .subscribe(object: DisposableSingleObserver<UrbanDictionaryDefinitions>() {
 
                 override fun onError(e: Throwable) {
                     Log.d("UrbanDictionaryDefinitionsViewModel", "onError");
                     definitionsList.postValue(createDummyDefinitions())
                 }
 
-                override fun onNext(data: UrbanDictionaryDefinitions) {
+                override fun onSuccess(data: UrbanDictionaryDefinitions) {
                     Log.d("UrbanDictionaryDefinitionsViewModel", "onNext");
                     if (data.definitions.isNotEmpty()) {
                         definitionsList.postValue(data)
@@ -36,9 +34,6 @@ class UrbanDictionaryDefinitionsViewModel(val definitionsRepository: UrbanDictio
                     }
                 }
 
-                override fun onComplete() {
-                    Log.d("UrbanDictionaryDefinitionsViewModel", "onComplete");
-                }
             })
 
         }
@@ -65,10 +60,4 @@ class UrbanDictionaryDefinitionsViewModel(val definitionsRepository: UrbanDictio
         return UrbanDictionaryDefinitions(definitions = dummyDefinitionList)
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        if(!disposable.isDisposed){
-            disposable.dispose()
-        }
-    }
 }

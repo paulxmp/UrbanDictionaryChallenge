@@ -1,6 +1,5 @@
 package com.nomadconsultants.urbandictionarychallenge.model
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.nomadconsultants.urbandictionarychallenge.repository.UrbanDictionaryDefinitionsRepository
@@ -20,18 +19,18 @@ class UrbanDictionaryDefinitionsViewModel(val definitionsRepository: UrbanDictio
                 .subscribe(object: DisposableSingleObserver<UrbanDictionaryDefinitions>() {
 
                 override fun onError(e: Throwable) {
-                    Log.d("UrbanDictionaryDefinitionsViewModel", "onError");
                     definitionsList.postValue(createDummyDefinitions())
+                    dispose()
                 }
 
                 override fun onSuccess(data: UrbanDictionaryDefinitions) {
-                    Log.d("UrbanDictionaryDefinitionsViewModel", "onNext");
                     if (data.definitions.isNotEmpty()) {
                         definitionsList.postValue(data)
                         definitionsHashMap.put(term, data)
                     } else {
                         definitionsList.postValue(createDummyDefinitions())
                     }
+                    dispose()
                 }
 
             })
